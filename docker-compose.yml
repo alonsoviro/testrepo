@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000" # Map port 5000 on the host to port 5000 in the container
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/mydatabase # Connection string to MongoDB
+      JWT_SECRET: 65a824a6e5e2a80146fdcd2bbf80c8af757984100c655a62bb5ca9a8bc4ef346
+      PORT: 5000
+    depends_on:
+      - mongo # Ensure MongoDB service starts before the app
+
+  mongo:
+    image: mongo:latest # Use the latest official MongoDB image
+    ports:
+      - "27017:27017" # Map port 27017 on the host to port 27017 in the container
+    volumes:
+      - mongo-data:/data/db # Persist MongoDB data
+
+volumes:
+  mongo-data: # Named volume for MongoDB data persistence
